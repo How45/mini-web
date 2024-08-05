@@ -1,31 +1,45 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Darts from "../components/DartsStart";
-import Cal from "../components/CalButton"
+import Cal from "../components/CalButton";
+import Timer from "../components/MiskBox";
 
 function Game(){
+    const [gameStarted, setGameStarted] = useState(0);
     const [boardScore, setBoardScore] = useState(0);
     const [newBoard, setNewBoard] = useState(false);
 
-    const updateScore = (valueKey) =>{setBoardScore(prevScore => prevScore + valueKey)};
-    const getScore = () => {return boardScore;}
+    const setGameStart = (valuekey) => {setGameStarted(valuekey)};
+    const getGameStarted = () => {return gameStarted};
 
-    const updateRefresh = (key) => {setNewBoard(key);};
-    const getRefreshVal = () => {return newBoard;}
+    const updateScore = (valueKey) =>{setBoardScore(prevScore => prevScore + valueKey)};
+    const resetScore = () => {setBoardScore(0)};
+    const getScore = () => {return boardScore};
+
+    const updateRefresh = (key) => {setNewBoard(key)};
+    const getRefreshValue = () => {return newBoard};
 
     return(
         <main>
             {/* Image of Darts will be here */}
-            <Darts 
+            <Darts
+                getGameStarted={getGameStarted}
+                setGameStart={setGameStart}
+
                 score={getScore}
                 changeScore={updateScore}
+                resetScore={resetScore}
+
                 refresh = {updateRefresh}
-                getRefresh={getRefreshVal}/>
-            <div className="container">
-                <Cal
-                    score={getScore}
-                    refresh = {updateRefresh}/>
-            </div>
+                getRefresh={getRefreshValue}/>
+
+            <Timer
+                getStart={getGameStarted}
+                setStart={setGameStart}/>
+
+            <Cal
+                score={getScore}
+                refresh = {updateRefresh}/>
         </main>
     );
 }

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
-function DartboardGame({changeScore, refresh, getRefresh}) {
+function DartboardGame({getGameStarted, setGameStart, changeScore, resetScore, refresh, getRefresh}) {
     const dartSpots = {
         N1 :  [["20", "51"] , ["35", "46"]],
         D1 :  ["15", "51"],
@@ -40,7 +40,7 @@ function DartboardGame({changeScore, refresh, getRefresh}) {
         D9 :  ["29", "9"],
         T9 :  ["35", "22"]
     };
-    const [gameStarted, setGameStarted] = useState(0);
+
     // const [boardScore, setBoardScore] = useState(0);
 
     const startGame = () => {
@@ -94,30 +94,32 @@ function DartboardGame({changeScore, refresh, getRefresh}) {
     useEffect(() => {
         if (getRefresh()) {
             console.log("Refreshed");
+            resetScore(0)
             startGame();
             refresh(false);
         }
-        if (gameStarted == 1) {
+        if (getGameStarted() == 1) {
             console.log("Game Started");
-            setGameStarted(2);
+            setGameStart(2);
             startGame();
         }
-    }, [gameStarted, getRefresh()]);
+    }, [getGameStarted, getRefresh]);
 
     return (
-    <div className="container">
-        {gameStarted ? (
-            <div className="board-container">
-                <Image src="/dart-board.png" alt="dartBoard" className="dartBoard" width={300} height={300}/>
-                <Image src="/darts-red.png" className="dart" id="dart1" alt="green-dart" width={35} height={35}/>
-                <Image src="/darts-green.png" className="dart" id="dart2" alt="green-dart" width={35} height={35}/>
-                <Image src="/darts-blue.png" className="dart" id="dart3" alt="blue-dart" width={35} height={35}/>
-            </div>
-        ) : (
-            <button onClick={() => setGameStarted(1)}>Start</button>
-        )}
-        {/* <p className='score'>Board Score: {boardScore}</p> */}
-    </div>);
+        <div className="left">
+            {getGameStarted() ? (
+                <div className="board-container">
+                    <Image src="/dart-board.png" alt="dartBoard" className="dartBoard" width={300} height={300}/>
+                    <Image src="/darts-red.png" className="dart" id="dart1" alt="green-dart" width={35} height={35}/>
+                    <Image src="/darts-green.png" className="dart" id="dart2" alt="green-dart" width={35} height={35}/>
+                    <Image src="/darts-blue.png" className="dart" id="dart3" alt="blue-dart" width={35} height={35}/>
+                </div>
+            ) : (
+                <button onClick={() => setGameStart(1)}>Start</button>
+            )}
+            {/* <p className='score'>Board Score: {boardScore}</p> */}
+        </div>
+    );
 }
 
 export default DartboardGame
